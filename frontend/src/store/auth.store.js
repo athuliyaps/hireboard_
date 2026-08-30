@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { adminLogin, logout as logoutService, userLogin } from "../services/authService";
+import { login as loginService } from "../services/authService";
 
-export const loginAdmin = createAsyncThunk(
-    'auth/loginAdmin',
+export const loginThunk = createAsyncThunk(
+    'auth/login',
     async(credentials,{rejectWithValue})=>{
     try{
-        const data = await adminLogin(credentials)
+        const data = await loginService(credentials)
         localStorage.setItem('accessToken',data.accessToken)
         localStorage.setItem('refreshToken',data.refreshToken)
         return data
@@ -16,22 +16,7 @@ export const loginAdmin = createAsyncThunk(
     }
 )
 
-export const loginUser = createAsyncThunk(
-  'auth/loginUser',
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const data = await userLogin(credentials)
-      localStorage.setItem('accessToken', data.accessToken)
-      localStorage.setItem('refreshToken', data.refreshToken)
-      return data
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Login failed')
-    }
-  }
-)
-
 export const logoutThunk = createAsyncThunk('auth/logout', async () => {
-  await logoutService()
   localStorage.removeItem('accessToken')
   localStorage.removeItem('refreshToken')
 })
@@ -48,31 +33,17 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(loginAdmin.pending, (state) => {
+      .addCase(loginThunk.pending, (state) => {
         state.loading = true
         state.error = null
       })
-      .addCase(loginAdmin.fulfilled, (state, action) => {
-        state.loading = false
-        state.isAuthenticated = true
-        state.user = action.payload.admin
-        state.role = 'admin'
-      })
-      .addCase(loginAdmin.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload
-      })
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true
-        state.error = null
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginThunk.fulfilled, (state, action) => {
         state.loading = false
         state.isAuthenticated = true
         state.user = action.payload.user
-        state.role = 'user'
+        state.role = action.payload.user.role
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })

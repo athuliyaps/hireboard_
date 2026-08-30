@@ -96,8 +96,8 @@ const jobsSlice = createSlice({
         state.error = null
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
-        state.loading = false
-        state.list = action.payload.jobs
+         state.loading = false
+        state.list = action.payload.data
         state.total = action.payload.total
       })
       .addCase(fetchJobs.rejected, (state, action) => {
@@ -117,11 +117,11 @@ const jobsSlice = createSlice({
         state.error = action.payload
       })
       .addCase(addJob.fulfilled, (state, action) => {
-        state.list.unshift(action.payload)
+        state.list.unshift(action.payload.data)
       })
       .addCase(editJob.fulfilled, (state, action) => {
         const index = state.list.findIndex((job) => job.id === action.payload.id)
-        if (index !== -1) state.list[index] = action.payload
+        if (index !== -1) state.list[index] = action.payload.data
       })
       .addCase(removeJob.fulfilled, (state, action) => {
         state.list = state.list.filter((job) => job.id !== action.payload)

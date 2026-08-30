@@ -1,11 +1,58 @@
 import { Pencil, Plus, Search, Trash2 } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { fetchJobs, removeJob, setFilters, setPage } from "../../store/jobs.store"
+import { ROUTES } from "../../constant/routePaths"
+import { CATEGORY_OPTIONS, EXPERIENCE_LEVEL_OPTIONS } from "../../constant/jobConstant"
 
 export const JobListingAdmin = () => {
-  const dummyJobs = [
-    { id: 1, title: 'Frontend Developer', category: 'Engineering', experienceLevel: 'Mid', status: 'active' },
-    { id: 2, title: 'UI/UX Designer', category: 'Design', experienceLevel: 'Entry', status: 'active' },
-    { id: 3, title: 'Sales Executive', category: 'Sales', experienceLevel: 'Senior', status: 'closed' },
-  ]
+  // const dummyJobs = [
+  //   { id: 1, title: 'Frontend Developer', category: 'Engineering', experienceLevel: 'Mid', status: 'active' },
+  //   { id: 2, title: 'UI/UX Designer', category: 'Design', experienceLevel: 'Entry', status: 'active' },
+  //   { id: 3, title: 'Sales Executive', category: 'Sales', experienceLevel: 'Senior', status: 'closed' },
+  // ]
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const {
+    list,
+    total,
+    currentPage,
+    filters,
+    loading,
+    error} = useSelector((state)=>state.jobs)
+  const [search,setSearch] = useState('')
+
+  const limit =10
+
+  useEffect(()=>{
+  dispatch(fetchJobs({
+    page:currentPage,
+    limit,
+    ...filters
+  }))
+  },[dispatch,currentPage,filters])
+
+  const handleChange = (e)=>{
+    const {name,value} = e.target;
+    dispatch(setFilters({[name]:value}))
+    dispatch(setPage(1))
+  }
+
+  const handleDelete =(id)=>{
+    alert('Are you sure you want to delete this job?')
+    dispatch(removeJob(id))
+  }
+
+  const handleShowJobs = ()=>{
+    if(!list.length) return 'Showing 0 jobs'
+    const start = (currentPage - 1) * limit + 1
+    const end = (currentPage - 1) * limit + list.length
+    return `Showing ${start} - ${end} of ${total} jobs`
+  }
+
+  const totalPages = Math.ceil(total/limit)
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -13,7 +60,9 @@ export const JobListingAdmin = () => {
           <h1 className="text-2xl font-bold text-text mb-1">Jobs</h1>
           <p className="text-muted text-sm">Manage job postings</p>
         </div>
-        <button className="flex items-center gap-2 bg-primary text-white text-sm font-medium px-4 py-2.5 rounded-md hover:opacity-90 transition-opacity">
+        <button 
+        onClick={()=>navigate(ROUTES.ADMIN_JOB_CREATE)}
+        className="flex items-center gap-2 bg-primary text-white text-sm font-medium px-4 py-2.5 rounded-md hover:opacity-90 transition-opacity">
           <Plus size={18} />
           Create Job
         </button>
@@ -25,25 +74,43 @@ export const JobListingAdmin = () => {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
           <input
             type="text"
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
             placeholder="Search jobs..."
             className="w-full bg-panel border border-border rounded-md pl-9 pr-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
-        <select className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <select 
+        value={filters.category}
+        onChange={handleChange}
+        className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
           <option value="">All Categories</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Design">Design</option>
-          <option value="Sales">Sales</option>
+          {
+            CATEGORY_OPTIONS.map((item)=>(
+          <option key={item} value={item}>{item}</option>
+
+            ))
+          }
         </select>
 
-        <select className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+        <select 
+        value={filters.experienceLevel}
+        className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
           <option value="">All Levels</option>
-          <option value="Entry">Entry</option>
-          <option value="Mid">Mid</option>
-          <option value="Senior">Senior</option>
+          {
+            EXPERIENCE_LEVEL_OPTIONS.map((item)=>(
+          <option key={item} value={item}>{item}</option>
+
+            ))
+          }  
         </select>
       </div>
+      {loading && <p className="text-muted text-sm mb-4">Loading jobs...</p>}
+      {error && <p className="text-danger text-sm mb-4">{error}</p>}
+
+{!loading && !error &&(
+  <>
 
       <div className="bg-panel border border-border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
@@ -57,7 +124,10 @@ export const JobListingAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {dummyJobs.map((job) => (
+            { list.filter((job)=>
+            search ? job.title.toLowerCase().includes(search.toLowerCase()) : true
+          )  
+            .map((job) => (
               <tr key={job.id} className="border-b border-border last:border-0">
                 <td className="px-4 py-3 text-text">{job.title}</td>
                 <td className="px-4 py-3 text-muted">{job.category}</td>
@@ -75,10 +145,14 @@ export const JobListingAdmin = () => {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-2">
-                    <button className="p-1.5 rounded-md text-muted hover:bg-bg hover:text-primary transition-colors">
+                    <button 
+                    onClick={()=>navigate(ROUTES.ADMIN_JOB_EDIT(job.id))}
+                    className="p-1.5 rounded-md text-muted hover:bg-bg hover:text-primary transition-colors">
                       <Pencil size={16} />
                     </button>
-                    <button className="p-1.5 rounded-md text-muted hover:bg-bg hover:text-danger transition-colors">
+                    <button 
+                    onClick={()=> handleDelete(job.id)}
+                    className="p-1.5 rounded-md text-muted hover:bg-bg hover:text-danger transition-colors">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -88,15 +162,24 @@ export const JobListingAdmin = () => {
           </tbody>
         </table>
       </div>
+  </>
+)}
+
 
       <div className="flex items-center justify-between mt-4">
-        <p className="text-muted text-sm">Showing 1-3 of 3 jobs</p>
+        <p className="text-muted text-sm">{handleShowJobs()}</p>
         <div className="flex gap-1">
-          <button className="px-3 py-1.5 rounded-md border border-border text-muted text-sm hover:bg-panel">
+          <button 
+          disabled={currentPage <= 1}
+          onClick={()=>dispatch(setPage(currentPage-1))}
+          className="px-3 py-1.5 rounded-md border border-border text-muted text-sm hover:bg-panel">
             Previous
           </button>
-          <button className="px-3 py-1.5 rounded-md bg-primary text-white text-sm">1</button>
-          <button className="px-3 py-1.5 rounded-md border border-border text-muted text-sm hover:bg-panel">
+          <button className="px-3 py-1.5 rounded-md bg-primary text-white text-sm">{currentPage}</button>
+          <button 
+          disabled={currentPage >= totalPages}
+          onClick={()=>dispatch(setPage(currentPage + 1))}
+          className="px-3 py-1.5 rounded-md border border-border text-muted text-sm hover:bg-panel">
             Next
           </button>
         </div>
