@@ -15,7 +15,7 @@ const registerUser = async ({name,email,password})=>{
         name,
         email,
         password:passwordHash,
-        role:ROLES.USER
+        role:role
     })
     return {
         id:newUser.id , 

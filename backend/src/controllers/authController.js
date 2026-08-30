@@ -22,7 +22,7 @@ const login = async(req,res)=>{
         const result = await loginUser(req.body)
         res.status(202).json({
             message:'Login sucessful',
-            result
+           ...result
         })
 
     }catch(err){
