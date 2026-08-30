@@ -4,6 +4,8 @@ const cors = require('cors')
 const morgan = require('morgan')
 const { sequelize } = require('./src/models')
 const authRoutes = require('./src/routes/authRoutes')
+const jobRoutes = require('./src/routes/jobRoutes')
+const applicationRoutes = require('./src/routes/applicationRoute')
 const app = express()
 
 app.use(cors())
@@ -15,6 +17,8 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/auth',authRoutes)
+app.use('/api/job',jobRoutes)
+app.use('/api/applications',applicationRoutes)
 
 const PORT = process.env.PORT || 5000
 

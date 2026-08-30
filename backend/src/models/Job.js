@@ -38,14 +38,14 @@ const Job = sequelize.define('Job',{
     allowNull: false,
     defaultValue: 'active',
   },
-  createdBy: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'users',
-      key: 'id',
-    },
-  },
+  // createdBy: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: {
+  //     model: 'users',
+  //     key: 'id',
+  //   },
+  // },
 }, {
   tableName: 'jobs',
   timestamps: true,

@@ -26,6 +26,8 @@ const login = async(req,res)=>{
         })
 
     }catch(err){
+    console.error("💥 Login Route Crash Details:", err);
+
       res.status(err.statusCode || 500).json({message:err.messag || 'Login failed'})
     }
 }

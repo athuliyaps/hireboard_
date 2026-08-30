@@ -1,7 +1,6 @@
-const { compare } = require("bcrypt")
 const { ROLES } = require("../constants/Constants")
 const { User, RefreshToken } = require("../models")
-const { hashPassword, comparePassword } = require("../utils/hashPassword")
+const { hashPassword, comparePassword } = require("../utils/passwordBcrypt")
 const { generateTokens, generateRefreshToken } = require("../utils/generateTokens")
 const jwt = require('jsonwebtoken')
 
@@ -31,6 +30,8 @@ const loginUser = async({email,password,role})=>{
     if(!user){
         throw Object.assign(new Error('Invalid email or password'),{statusCode:400})
     }
+        console.log("👉 DECODED DATABASE RECORD LOOKUP:", user.toJSON());
+
     if(role && user.role !==role){
          throw Object.assign(new Error('Access denied for this role'),{statusCode:400}) 
     }

@@ -5,8 +5,8 @@ const RefreshToken = require('./RefreshToken');
 const Application = require("./Application");
 
 
-User.hasMany(Job, { foreignKey: 'createdBy', as: 'postedJobs' })
-Job.belongsTo(User, { foreignKey: 'createdBy', as: 'postedBy' })
+// User.hasMany(Job, { foreignKey: 'createdBy', as: 'postedJobs' })
+// Job.belongsTo(User, { foreignKey: 'createdBy', as: 'postedBy' })
 
 User.hasMany(Application, { foreignKey: 'userId', as: 'applications' })
 Application.belongsTo(User, { foreignKey: 'userId', as: 'applicant' })
