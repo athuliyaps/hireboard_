@@ -26,10 +26,10 @@ const Application = sequelize.define('Application',{
       key: 'id',
     },
   },
-  apply_status:{
-   type: DataTypes.ENUM(Object.values(APPLY_STATUS)),
+  applyStatus:{
+   type: DataTypes.ENUM(...Object.values(APPLY_STATUS)),
     allowNull: false,
-    defaultValue: 'pending',
+    defaultValue: APPLY_STATUS.PENDING,
   },
 
   },{

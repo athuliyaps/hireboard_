@@ -22,7 +22,7 @@ const Job = sequelize.define('Job',{
     allowNull: false,
   },
   experienceLevel: {
-    type: DataTypes.ENUM(Object.values(EXPERIENCE)),
+    type: DataTypes.ENUM(...Object.values(EXPERIENCE)),
     allowNull: false,
   },
   location: {
@@ -33,8 +33,8 @@ const Job = sequelize.define('Job',{
     type: DataTypes.STRING,
     allowNull: true,
   },
-  job_status: {
-    type: DataTypes.ENUM(Object.values(JOB_STATUS)),
+  jobStatus: {
+    type: DataTypes.ENUM(...Object.values(JOB_STATUS)),
     allowNull: false,
     defaultValue: 'active',
   },

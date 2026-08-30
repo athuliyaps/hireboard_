@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const { sequelize } = require('./src/models')
-
+const authRoutes = require('./src/routes/authRoutes')
 const app = express()
 
 app.use(cors())
@@ -14,12 +14,17 @@ app.get('/',(req,res)=>{
     res.json({message:"HireBoard API is running"})
 })
 
+app.use('/api/auth',authRoutes)
+
 const PORT = process.env.PORT || 5000
 
 const server = async()=>{
     try{
   await sequelize.authenticate()
   console.log(`DB ${process.env.DB_NAME} connected sucessfully`);
+  
+  await sequelize.sync({alter:true})
+  console.log('Models synced sucessfully');
   
   app.listen(PORT,()=>{
     console.log(`Server running in port ${PORT}`);
