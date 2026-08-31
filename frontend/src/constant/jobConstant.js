@@ -8,9 +8,9 @@ export const CATEGORY_OPTIONS = [
 ]
 
 export const EXPERIENCE_LEVEL_OPTIONS = [
-  'Entry',
-  'Mid',
-  'Senior',
+  'entry',
+  'mid',
+  'senior',
 ]
 
 export const JOB_STATUS = {

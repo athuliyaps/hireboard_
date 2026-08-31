@@ -8,7 +8,9 @@ export const AUTH_ENDPOINTS = {
 
 export const JOB_ENDPOINTS = {
   BASE: '/job',
-  BY_ID: (id) => `/job/${id}`,
+  BY_ID: (id) => `/job?id=${id}`,
+  MUTATION: (id) => `/job/${id}`,
+  COUNT: '/job/count'
 }
 
 export const APPLICATION_ENDPOINTS = {

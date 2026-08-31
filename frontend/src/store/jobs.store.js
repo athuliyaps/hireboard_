@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { createJob, deleteJob, getJobById, getJobs, updateJob } from "../services/jobService"
+import { createJob, deleteJob, getDashboard, getJobById, getJobs, updateJob } from "../services/jobService"
 
 
 
@@ -64,6 +64,19 @@ export const removeJob = createAsyncThunk(
   }
 )
 
+export const fetchDashboard = createAsyncThunk(
+  'jobs/fetchDashboard',
+  async(_,{rejectWithValue})=>{
+    try{
+     const data = await getDashboard()
+     return data
+    }catch(err){
+    return rejectWithValue(err.response?.data?.message || 'Failed to fetch stats')
+
+    }
+  }
+)
+
 const jobsSlice = createSlice({
   name: 'jobs',
   initialState: {
@@ -73,7 +86,11 @@ const jobsSlice = createSlice({
     filters: {
       category: '',
       experienceLevel: '',
+      search:'',
+      dateFrom:'',
+      dateTo:''
     },
+    count:{total :0,active:0,closed:0},
     selectedJob: null,
     loading: false,
     error: null,
@@ -97,8 +114,9 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
          state.loading = false
-        state.list = action.payload.data
-        state.total = action.payload.total
+        state.list = action.payload.data.rows
+        state.total = action.payload.data.total
+        state.currentPage = action.payload.data.page
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.loading = false
@@ -110,7 +128,7 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobById.fulfilled, (state, action) => {
         state.loading = false
-        state.selectedJob = action.payload
+        state.selectedJob = action.payload.data
       })
       .addCase(fetchJobById.rejected, (state, action) => {
         state.loading = false
@@ -120,11 +138,18 @@ const jobsSlice = createSlice({
         state.list.unshift(action.payload.data)
       })
       .addCase(editJob.fulfilled, (state, action) => {
-        const index = state.list.findIndex((job) => job.id === action.payload.id)
-        if (index !== -1) state.list[index] = action.payload.data
+        const updatedJob = action.payload.data
+        if(updatedJob){
+         const index = state.list.findIndex((job) => job.id === updatedJob.id)
+        if (index !== -1) state.list[index] = updatedJob
+        }
+        
       })
       .addCase(removeJob.fulfilled, (state, action) => {
         state.list = state.list.filter((job) => job.id !== action.payload)
+      })
+      .addCase(fetchDashboard.fulfilled,(state,action)=>{
+        state.count = action.payload.data
       })
   },
 })
