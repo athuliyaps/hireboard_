@@ -1,4 +1,4 @@
-const { where } = require("sequelize")
+const { Op } = require("sequelize")
 const { Job } = require("../models")
 
 const createJob = async (job)=>{
@@ -7,7 +7,17 @@ const createJob = async (job)=>{
 }
 
 const getAllJobs = async (query={})=>{
-    const {id,category,experienceLevel, status,page=1,limit=10} = query
+    const {
+        id,
+        category,
+        experienceLevel, 
+        status,
+        search, 
+        dateFrom, 
+        dateTo,
+        page=1,
+        limit=10
+        } = query
 
 if(id){
     const job = await Job.findByPk(id)
@@ -21,6 +31,13 @@ const where = {}
 if(category) where.category = category
 if(experienceLevel) where.experienceLevel = experienceLevel
 if(status) where.status = status
+if(search) where.title = {[Op.iLike]: `%${search}%`}
+
+if(dateFrom || dateTo){
+    where.createdAt={}
+    if(dateFrom) where.createdAt[Op.gte] = new Date(dateFrom)
+    if(dateTo) where.createdAt[Op.lte] = new Date(dateTo)
+}
 
 const {count,rows}= await Job.findAndCountAll({
     where,
@@ -29,8 +46,7 @@ const {count,rows}= await Job.findAndCountAll({
     order:[['createdAt','DESC']]
 })
 return {
-    message:'Jobs retrived sucessfully',
-    data:rows,
+    rows,
     page:Number(page),
     total:count
 
@@ -55,4 +71,20 @@ const deleteJob = async (id)=>{
     return job
 }
 
-module.exports={getAllJobs,createJob,updateJob,deleteJob}
+const getDashboard = async ()=>{
+    const total = await Job.count()
+    const active = await Job.count({
+        where:{jobStatus:'active'}
+    })
+     const closed = await Job.count({
+        where:{jobStatus:'closed'}
+    })
+    return{
+        total:total,
+        active:active,
+        closed:closed
+    }
+}
+
+
+module.exports={getAllJobs,createJob,updateJob,deleteJob,getDashboard}

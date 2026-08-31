@@ -1,4 +1,4 @@
-const { getAllJobs, createJob, updateJob,deleteJob } = require("../services/jobService")
+const { getAllJobs, createJob, updateJob,deleteJob, getDashboard } = require("../services/jobService")
 
 
 const createController = async (req,res)=>{
@@ -19,8 +19,12 @@ const createController = async (req,res)=>{
 
 const getController = async (req,res)=>{
     try{
-      const job = await getAllJobs(req.query)
-      return res.status(200).json(job)
+      const query = { ...req.query, id: req.params.id || req.query.id }
+      const job = await getAllJobs(query)
+      return res.status(200).json({
+        message:'Jobs retrived succesfully!!',
+        data:job
+      })
     }catch(err){
       return res.status(err.statusCode || 500).json({
         message:err.message || 'Failed to fetch job data'
@@ -55,4 +59,18 @@ const deleteController = async (req,res)=>{
 
 }
 
-module.exports={createController,getController,updateController,deleteController}
+const dashboardController = async (req,res)=>{
+  try{
+    const dashCount = await getDashboard()
+    res.status(200).json({
+      message:'Dashboard count retrived',
+      data:dashCount
+    })
+
+  }catch(err){
+    res.status(err.statusCode || 500).json({ message: err.message || 'Failed to fetch stats' })
+
+  }
+}
+
+module.exports={createController,getController,updateController,deleteController,dashboardController}
