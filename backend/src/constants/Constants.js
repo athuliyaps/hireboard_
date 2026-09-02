@@ -3,7 +3,7 @@ const ROLES = {
     USER:'user'
 }
 const EXPERIENCE = {
-    Entry:"entry",
+    ENTRY:"entry",
     MID:"mid",
     SENIOR:"senior"
 }

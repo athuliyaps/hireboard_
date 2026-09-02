@@ -15,6 +15,7 @@ const authenticate = (req,res,next)=>{
         req.user = result
         next()
     }catch(error){
+        console.log('APPLY ACCESS TOKEN ERROR:', error.message)
         return res.status(401).json({
             message:'Invalid or expired acesstoken'
         })

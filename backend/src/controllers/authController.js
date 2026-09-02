@@ -1,4 +1,4 @@
-const { registerUser, loginUser, refreshAcessToken } = require("../services/authService")
+const { registerUser, loginUser, refreshAcessToken, getAllUsers } = require("../services/authService")
 
 const register = async (req , res)=>{
     try{
@@ -26,7 +26,7 @@ const login = async(req,res)=>{
         })
 
     }catch(err){
-    console.error("💥 Login Route Crash Details:", err);
+    console.error("Login error---", err);
 
       res.status(err.statusCode || 500).json({message:err.messag || 'Login failed'})
     }
@@ -42,5 +42,19 @@ const refresh = async (req, res) => {
   }
 }
 
+const getController = async (req,res)=>{
+    try{
+        const user = await getAllUsers(req.body)
+        res.status(200).json({
+            message:'user retrived successfully!',
+            data:user
+        })
+    }catch(err){
+        res.status(err.statusCode || 500).json({
+            messag:err.message || 'Failed to retrive'
+        })
+    }
+}
 
-module.exports={register,login, refresh}
+
+module.exports={register,login, refresh,getController}

@@ -15,8 +15,6 @@ const createController = async (req,res)=>{
 }
 
 
-
-
 const getController = async (req,res)=>{
     try{
       const query = { ...req.query, id: req.params.id || req.query.id }

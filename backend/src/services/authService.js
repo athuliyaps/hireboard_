@@ -15,7 +15,7 @@ const registerUser = async ({name,email,password})=>{
         name,
         email,
         password:passwordHash,
-        role:role
+        role:ROLES.USER
     })
     return {
         id:newUser.id , 
@@ -30,7 +30,7 @@ const loginUser = async({email,password,role})=>{
     if(!user){
         throw Object.assign(new Error('Invalid email or password'),{statusCode:400})
     }
-        console.log("👉 DECODED DATABASE RECORD LOOKUP:", user.toJSON());
+        console.log("user details", user.toJSON());
 
     if(role && user.role !==role){
          throw Object.assign(new Error('Access denied for this role'),{statusCode:400}) 
@@ -39,7 +39,7 @@ const loginUser = async({email,password,role})=>{
     if(!isMatch){
          throw Object.assign(new Error('Invalid email or password'),{statusCode:401})
     }
-    const acessToken = generateTokens(user)
+    const accessToken = generateTokens(user)
     const refreshToken = generateRefreshToken(user)
 
     const expiresAt = new Date()
@@ -51,7 +51,7 @@ const loginUser = async({email,password,role})=>{
         expiresAt
     })
     return {
-        acessToken,
+        accessToken,
         refreshToken,
         user:{
             id:user.id,
@@ -92,4 +92,9 @@ const refreshAcessToken = async(refreshToken)=>{
        return { accessToken: newAccessToken }
 }
 
-module.exports={registerUser,loginUser,refreshAcessToken}
+const getAllUsers = async()=>{
+    const users = await User.findAll()
+    return users
+}
+
+module.exports={registerUser,loginUser,refreshAcessToken,getAllUsers}

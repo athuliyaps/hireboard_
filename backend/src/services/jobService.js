@@ -30,7 +30,7 @@ const offset = (page-1)*limit
 const where = {}
 if(category) where.category = category
 if(experienceLevel) where.experienceLevel = experienceLevel
-if(status) where.status = status
+if(status) where.jobStatus = status
 if(search) where.title = {[Op.iLike]: `%${search}%`}
 
 if(dateFrom || dateTo){
