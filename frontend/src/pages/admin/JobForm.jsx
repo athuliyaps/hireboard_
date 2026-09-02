@@ -18,7 +18,7 @@ export const JobForm = () => {
     experienceLevel: '',
     location: '',
     salaryRange: '',
-    status: 'active',
+    jobStatus: 'active',
   })
   const [validationErrors, setValidationErrors] = useState({})
 
@@ -40,7 +40,7 @@ export const JobForm = () => {
         experienceLevel: selectedJob.experienceLevel || '',
         location: selectedJob.location || '',
         salaryRange: selectedJob.salaryRange || '',
-        status: selectedJob.status || 'active',
+        jobStatus: selectedJob.jobStatus || 'active',
       })
     }
   }, [isEditMode, selectedJob])
@@ -196,8 +196,8 @@ export const JobForm = () => {
      <div>
           <label className="block text-sm text-muted mb-1.5">Status</label>
           <select 
-          name="status"
-          value={formData.status}
+          name="jobStatus"
+          value={formData.jobStatus}
           onChange={handleChange}
           className="w-full bg-bg border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
             <option value="active">Active</option>

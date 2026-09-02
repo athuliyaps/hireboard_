@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../constant/routePaths'
-import { Link } from 'lucide-react'
 import { logoutThunk } from '../store/auth.store'
 
 export const FixedLayout = () => {
@@ -29,6 +28,9 @@ export const FixedLayout = () => {
             </Link>
             {isAuthenticated && role === 'user' ? (
               <>
+              <Link to={ROUTES.MY_APPLICATIONS} className="text-sm text-muted hover:text-text transition-colors" >
+             My applications
+              </Link>
                 <span className="text-sm text-muted">Hi, {user?.name}</span>
                 <button
                   onClick={handleLogout}

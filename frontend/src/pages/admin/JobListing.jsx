@@ -1,5 +1,5 @@
 import { Pencil, Plus, Search, Trash2 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { fetchJobs, removeJob, setFilters, setPage } from "../../store/jobs.store"
@@ -7,11 +7,6 @@ import { ROUTES } from "../../constant/routePaths"
 import { CATEGORY_OPTIONS, EXPERIENCE_LEVEL_OPTIONS } from "../../constant/jobConstant"
 
 export const JobListingAdmin = () => {
-  // const dummyJobs = [
-  //   { id: 1, title: 'Frontend Developer', category: 'Engineering', experienceLevel: 'Mid', status: 'active' },
-  //   { id: 2, title: 'UI/UX Designer', category: 'Design', experienceLevel: 'Entry', status: 'active' },
-  //   { id: 3, title: 'Sales Executive', category: 'Sales', experienceLevel: 'Senior', status: 'closed' },
-  // ]
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {
@@ -21,7 +16,6 @@ export const JobListingAdmin = () => {
     filters,
     loading,
     error} = useSelector((state)=>state.jobs)
-  const [search,setSearch] = useState('')
 
   const limit =10
 
@@ -68,14 +62,14 @@ export const JobListingAdmin = () => {
         </button>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-4">
         <div className="relative flex-1 min-w-[200px]">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
           <input
             type="text"
-            value={search}
-            onChange={(e)=>setSearch(e.target.value)}
+            name="search"
+            value={filters.search}
+            onChange={handleChange}
             placeholder="Search jobs..."
             className="w-full bg-panel border border-border rounded-md pl-9 pr-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -83,6 +77,7 @@ export const JobListingAdmin = () => {
 
         <select 
         value={filters.category}
+        name="category"
         onChange={handleChange}
         className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
           <option value="">All Categories</option>
@@ -96,6 +91,8 @@ export const JobListingAdmin = () => {
 
         <select 
         value={filters.experienceLevel}
+        name="experienceLevel"
+        onChange={handleChange}
         className="bg-panel border border-border rounded-md px-3 py-2 text-text text-sm focus:outline-none focus:ring-2 focus:ring-primary">
           <option value="">All Levels</option>
           {
@@ -124,10 +121,7 @@ export const JobListingAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            { list.filter((job)=>
-            search ? job.title.toLowerCase().includes(search.toLowerCase()) : true
-          )  
-            .map((job) => (
+            { list.map((job) => (
               <tr key={job.id} className="border-b border-border last:border-0">
                 <td className="px-4 py-3 text-text">{job.title}</td>
                 <td className="px-4 py-3 text-muted">{job.category}</td>
@@ -135,12 +129,12 @@ export const JobListingAdmin = () => {
                 <td className="px-4 py-3">
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      job.status === 'active'
+                      job.jobStatus === 'active'
                         ? 'bg-success/10 text-success'
                         : 'bg-danger/10 text-danger'
                     }`}
                   >
-                    {job.status}
+                    {job.jobStatus}
                   </span>
                 </td>
                 <td className="px-4 py-3">

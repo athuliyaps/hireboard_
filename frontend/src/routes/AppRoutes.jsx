@@ -12,6 +12,7 @@ import { JobListing } from "../pages/Public/JobListing";
 import { JobDetails } from "../pages/Public/JobDetails";
 import { Login } from "../pages/Public/Login";
 import { Register } from "../pages/Public/Register";
+import { MyApplications } from "../pages/Public/MyApplications";
 
 
 function AppRoutes(){
@@ -27,8 +28,9 @@ function AppRoutes(){
             </Route>
             </Route>
             <Route element={<FixedLayout/>}>
+            <Route path={ROUTES.MY_APPLICATIONS} element={<MyApplications/>}/>
             <Route path={ROUTES.USER_LOGIN} element={<Login/>}/>
-            <Route path={ROUTES.ADMIN_REGISTER} element={<Register/>}/>
+            <Route path={ROUTES.USER_REGISTER} element={<Register/>}/>
             <Route path={ROUTES.HOME} element={<Landing/>}/>
             <Route path={ROUTES.JOB_LISTING} element={<JobListing/>}/>
              <Route path='/jobs/:id' element={<JobDetails/>}/>

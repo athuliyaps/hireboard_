@@ -57,7 +57,8 @@ const applicationsSlice = createSlice({
         state.error = action.payload
       })
       .addCase(fetchMyApplications.fulfilled, (state, action) => {
-        state.myApplications = action.payload
+        state.myApplications = action.payload.data
+        
       })
   },
 })
