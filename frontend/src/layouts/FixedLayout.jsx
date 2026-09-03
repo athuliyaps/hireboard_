@@ -15,14 +15,14 @@ export const FixedLayout = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-bg flex flex-col">
+    <div className="min-h-screen bg-bg flex flex-col w-full overflow-x-hidden">
       <header className="border-b border-border bg-panel">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
           <Link to={ROUTES.HOME} className="text-xl font-bold text-text">
             Hire<span className="text-primary">Board</span>
           </Link>
 
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 sm:gap-6 text-sm">
             <Link to={ROUTES.JOB_LISTING} className="text-sm text-muted hover:text-text transition-colors">
               Browse Jobs
             </Link>

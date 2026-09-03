@@ -20,7 +20,7 @@ function Card({label,value,icon:Icon,colorClass}){
 
 function Dashboard(){
     const dispatch = useDispatch()
-    const {list,total,currentPage,filters,count,loading,error} = useSelector((state)=>state.jobs)
+    const {list,currentPage,filters,count,loading,error} = useSelector((state)=>state.jobs)
     const limit = 10
 
     useEffect(()=>{
@@ -110,7 +110,7 @@ function Dashboard(){
         }
         {
             !loading && !error && (
-                <div className="bg-panel border-border rounded-lg overflow-hidden">
+                <div className="bg-panel border-border rounded-lg overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-border text-muted text-left" >

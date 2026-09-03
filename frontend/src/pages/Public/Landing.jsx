@@ -43,7 +43,7 @@ export const Landing = () => {
 <div>
     <section className='bg-panel border-b border-l-border'>
         <div className='max-w-6xl mx-auto px-6 py-20 text-center'>
-            <h1 className='text-4xl font-bold text-text mb-4'>
+            <h1 className='text-2xl sm:text-4xl font-bold text-text mb-4'>
           Find Your Next <span className="text-primary">Opportunity</span>
          </h1>
          <p className='text-muted text-lg mb-8 max-w-xl mx-auto'>
