@@ -97,12 +97,12 @@ JWT_REFRESH_EXPIRY=7d
 cd frontend
 npm install
 ```
-- 
+
 Create `.env` fie in `frontend/` 
 ```env
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
-- 
+
 Run the frontend:
 ```bash
 npm run dev
@@ -141,13 +141,21 @@ npm run dev
 
 
 
-## known applications
+## Known applications
 
 - Access tokens expire after 15 minutes; automatic silent refresh on the frontend is not yet implemented, so users may need to log in again after extended inactivity. The refresh endpoint itself is fully functional and tested
 - Database schema is managed via Sequelize's `sync({ alter: true })` for development speed rather than versioned migration files
 
 
+## Database migrations
 
+- Migration files are located in `backend/src/migrations/`.To run them on a fresh database:
+\`\`\` bash
+cd backend
+npx sequelize-cli db:migrate
+\`\`\`
+
+Note : The application also auto-syncs schema via `sequelize.sync({ alter: true })` on startup for development convenience.
 
 
 
