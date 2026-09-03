@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../config/database')
 const User = require('./User');
-const { EXPERIENCE, JOB_STATUS } = require("../constants/Constants");
+const { EXPERIENCE, JOB_STATUS, CATEGORY } = require("../constants/Constants");
 
 const Job = sequelize.define('Job',{
     id: {
@@ -17,8 +17,12 @@ const Job = sequelize.define('Job',{
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
+  // category: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+  // },
+   category: {
+    type: DataTypes.ENUM(...Object.values(CATEGORY)),
     allowNull: false,
   },
   experienceLevel: {
