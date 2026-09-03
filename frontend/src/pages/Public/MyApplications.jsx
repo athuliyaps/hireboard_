@@ -13,6 +13,7 @@ export const MyApplications = () => {
     useEffect(()=>{
         dispatch(fetchMyApplications())
     },[dispatch])
+    console.log("My applications",myApplications);
     
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constant/routePaths'
@@ -37,6 +37,8 @@ export const Landing = () => {
     },[dispatch])
 
     const getJobdetils = (id)=>navigate(ROUTES.JOB_DETAILS(id))
+    console.log('jod details',list);
+    
 
   return (
     <>

@@ -18,6 +18,7 @@ export const JobListing = () => {
         if(categoryURL){
             dispatch(setFilters({category:categoryURL}))
         }
+
     },[])
 
     useEffect(()=>{
@@ -28,6 +29,8 @@ export const JobListing = () => {
             ...filters
         }))
     },[dispatch,currentPage,filters])
+    console.log('Job Listing',list);
+    
 
     const handleChange = (e)=>{
         const {name,value} = e.target
@@ -38,7 +41,7 @@ export const JobListing = () => {
 
   return (
     <>
-    <div className='max-w-6xl max-auto px-6 py-10'>
+    <div className='max-w-6xl mx-auto px-6 py-10'>
      <h1 className='text-2xl font-bold text-text mb-1'>Browse Jobs</h1>
      <p className='text-muted text-sm mb-6'>{total} open positions</p>
 
