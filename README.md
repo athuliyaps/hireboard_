@@ -150,12 +150,12 @@ npm run dev
 ## Database migrations
 
 - Migration files are located in `backend/src/migrations/`.To run them on a fresh database:
-\`\`\` bash
+``` bash
 cd backend
 npx sequelize-cli db:migrate
-\`\`\`
+```
 
-Note : The application also auto-syncs schema via `sequelize.sync({ alter: true })` on startup for development convenience.
+- Note : The application also auto-syncs schema via `sequelize.sync({ alter: true })` on startup for development convenience.
 
 
 
